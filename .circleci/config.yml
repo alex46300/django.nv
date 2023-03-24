@@ -37,10 +37,9 @@ jobs:
     steps:
       - checkout
 
-      - run: |
-          npm install
-          npm install -g retire
-          retire --outputformat json --outputpath retirejs-report.json --severity high
+      - run: npm install
+      - run: npm install -g retire
+      - run: retire --outputformat json --outputpath retirejs-report.json --severity high
 
       - store_artifacts:
           path: retirejs-output.json
