@@ -34,8 +34,6 @@ jobs:
           when: always
           
   oast-frontend-npm:
-    docker:
-      - image: node:alpine3.10
     machine: true
     steps:
       - checkout
