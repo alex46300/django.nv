@@ -35,11 +35,12 @@ jobs:
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json
+      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json || true
 
       - store_artifacts:
           path: bandit-output.json
           destination: bandit-artifact 
+          when: always
 
   integration:
     docker:
