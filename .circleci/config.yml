@@ -28,7 +28,7 @@ jobs:
 
       - store_artifacts:
           path: retirejs-docker-report.json
-          destination: retirejs-artifact
+          destination: retirejs-docker-artifact
           when: always
           
   oast-frontend-npm:
@@ -45,7 +45,7 @@ jobs:
 
       - store_artifacts:
           path: retirejs-npm-report.json
-          destination: retirejs-artifact
+          destination: retirejs-npm-artifact
           when: always
 
   sast:
