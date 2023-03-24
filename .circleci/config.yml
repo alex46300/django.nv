@@ -18,11 +18,14 @@ jobs:
           python manage.py test taskManager
 
   oast-frontend-docker:
+    docker:
+      - image: node:alpine3.10
     machine: true
     steps:
       - checkout
 
       - run: |
+          npm install
           docker run --rm -v $(pwd):/src -w /src hysnsec/retire --outputformat json --outputpath retirejs-docker-report.json --severity high || true
 
       - store_artifacts:
@@ -40,10 +43,10 @@ jobs:
       - run: |
           npm install
           npm install -g retire
-          retire --outputformat json --outputpath retirejs-report.json --severity high
+          retire --outputformat json --outputpath retirejs-npm-report.json --severity high
 
       - store_artifacts:
-          path: retirejs-output.json
+          path: retirejs-npm-report.json
           destination: retirejs-artifact
           when: always
 
@@ -52,10 +55,10 @@ jobs:
     steps:
       - checkout
 
-      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-npm-report.json || true
+      - run: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-report.json || true
 
       - store_artifacts:
-          path: bandit-npm-report.json
+          path: bandit-report.json
           destination: bandit-artifact
           when: always
 
