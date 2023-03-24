@@ -17,13 +17,30 @@ jobs:
           pip install -r requirements.txt
           python manage.py test taskManager
 
-  oast-frontend:
+  oast-frontend-doker:
     machine: true
     steps:
       - checkout
 
-      - run: 
-          command: docker run --rm -v $(pwd):/src hysnsec/bandit -r /src -f json -o /src/bandit-output.json || true
+      - run: |
+          docker run --rm -v $(pwd):/src -w /src hysnsec/retire --outputformat json --outputpath retirejs-docker-report.json --severity high || true
+
+      - store_artifacts:
+          path: retirejs-docker-output.json
+          destination: retirejs-artifact
+          when: always
+          
+  oast-frontend-npm:
+    docker:
+      - image: node:alpine3.10
+    machine: true
+    steps:
+      - checkout
+
+      - run: |
+          npm install
+          npm install -g retire
+          retire --outputformat json --outputpath retirejs-report.json --severity high
 
       - store_artifacts:
           path: retirejs-output.json
@@ -68,7 +85,10 @@ workflows:
       - test:
           requires:
             - build
-      - oast-frontend:
+      - oast-frontend-docker:
+          requires:
+            - test
+      - oast-frontend-npm:
           requires:
             - test
       - sast:
