@@ -110,6 +110,9 @@ workflows:
       - zap_baseline:
           requires:
             - sast
+      - integration:
+          requires:
+            - zap_baseline
       - prod:
           type: approval
           requires:
